@@ -1,0 +1,69 @@
+name: Release Insiders
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Use cached node_modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+          restore-keys: |
+            nodeModules-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: pnpm install
+
+      - name: Calculate environment variables
+        run: |
+          echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: 'Version `radix-icons` based on commit: 0.0.0-insiders.${{ env.SHA_SHORT }}'
+        run: pnpm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version
+
+      - name: 'Version `@radix-icons/react` based on commit: 0.0.0-insiders.${{ env.SHA_SHORT }}'
+        run: pnpm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version --prefix react
+
+      - name: 'Version `@radix-icons/vue` based on commit: 0.0.0-insiders.${{ env.SHA_SHORT }}'
+        run: pnpm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version --prefix vue
+
+      - name: Publish `radix-icons`
+        run: pnpm publish --tag insiders
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish `@radix-icons/react`
+        run: pnpm publish ./react --tag insiders
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish `@radix-icons/vue`
+        run: pnpm publish ./vue --tag insiders
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
