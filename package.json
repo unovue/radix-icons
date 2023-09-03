@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "prepublishOnly": "pnpm run build",
+    "cleanup": "rimraf -g ./{vue,react}/* !./{vue,react}/package.json",
     "build": "pnpm run build-react && pnpm run build-vue",
     "build-react": "node ./scripts/build.js react",
     "build-vue": "node ./scripts/build.js vue",
