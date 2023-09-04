@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepublishOnly": "pnpm run build",
-    "cleanup": "rimraf -g ./icons/* ./{vue,react}/* !./{vue,react}/package.json",
+    "cleanup": "del-cli ./icons/* ./{vue,react}/* !./{vue,react}/package.json",
     "build": "pnpm run pull && pnpm run build-react && pnpm run build-vue",
     "build-react": "node ./scripts/build.js react",
     "build-vue": "node ./scripts/build.js vue",
@@ -19,6 +19,7 @@
     "@svgr/core": "^8.1.0",
     "@vue/compiler-dom": "^3.3.4",
     "camelcase": "^8.0.0",
+    "del-cli": "^5.1.0",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
     "svgo": "^3.0.2"
