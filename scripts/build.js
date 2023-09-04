@@ -158,6 +158,7 @@ async function buildExports() {
 async function main(pkg) {
   const cjsPackageJson = { module: './esm/index.js', sideEffects: false }
   const esmPackageJson = { type: 'module', sideEffects: false }
+  let packageJson = JSON.parse(await fs.readFile(`./${pkg}/package.json`, 'utf8'))
 
   console.log(`Building ${pkg} package...`)
 
@@ -176,8 +177,6 @@ async function main(pkg) {
     ensureWriteJson(`./${pkg}/esm/package.json`, esmPackageJson),
     ensureWriteJson(`./${pkg}/package.json`, cjsPackageJson),
   ])
-
-  let packageJson = JSON.parse(await fs.readFile(`./${pkg}/package.json`, 'utf8'))
 
   packageJson.exports = await buildExports([''])
 
