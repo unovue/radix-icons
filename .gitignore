@@ -5,3 +5,4 @@ react/*
 vue/*
 !react/package.json
 !vue/package.json
+.env
