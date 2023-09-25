@@ -46,7 +46,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies 
+      - name: Install dependencies
         run: pnpm install
 
       - name: Calculate environment variables
@@ -63,16 +63,16 @@ jobs:
         run: pnpm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version --prefix vue
 
       - name: Publish `radix-icons`
-        run: pnpm publish --tag insiders  --no-git-checks
+        run: pnpm publish --tag insiders --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish `@radix-icons/react`
-        run: pnpm publish ./react --tag insiders
+        run: pnpm publish ./react --tag insiders --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish `@radix-icons/vue`
-        run: pnpm publish ./vue --tag insiders
+        run: pnpm publish ./vue --tag insiders --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
