@@ -63,7 +63,7 @@ jobs:
         run: pnpm version 0.0.0-insiders.${{ env.SHA_SHORT }} --force --no-git-tag-version --prefix vue
 
       - name: Publish `radix-icons`
-        run: pnpm publish --tag insiders
+        run: pnpm publish --tag insiders  --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
