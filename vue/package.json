@@ -16,5 +16,33 @@
   },
   "peerDependencies": {
     "vue": ">= 3"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./esm/index.js",
+      "require": "./index.js"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    },
+    "./*": {
+      "types": "./*.d.ts",
+      "import": "./esm/*.js",
+      "require": "./*.js"
+    },
+    "./*.js": {
+      "types": "./*.d.ts",
+      "import": "./esm/*.js",
+      "require": "./*.js"
+    },
+    "./esm/*": {
+      "types": "./*.d.ts",
+      "import": "./esm/*.js"
+    },
+    "./esm/*.js": {
+      "types": "./*.d.ts",
+      "import": "./esm/*.js"
+    }
   }
 }
